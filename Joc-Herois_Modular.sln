@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joc-Herois_Modular", "Joc-Herois_Modular\Joc-Herois_Modular.csproj", "{7636BF98-1180-440D-A16B-93017E91DBE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlibreriaJoc", "LlibreriaJoc\LlibreriaJoc.csproj", "{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7636BF98-1180-440D-A16B-93017E91DBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7636BF98-1180-440D-A16B-93017E91DBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7636BF98-1180-440D-A16B-93017E91DBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7636BF98-1180-440D-A16B-93017E91DBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC0595D6-82B3-435C-9943-A2593BE47106}
+	EndGlobalSection
+EndGlobal
