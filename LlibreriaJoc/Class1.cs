@@ -1,7 +1,10 @@
 ﻿namespace LlibreriaJoc
 {
-    public class Class1
+    public class GlobalMethods
     {
-
+        public static bool ValidateOption(string option, string[] validOptions)
+        {
+            return validOptions.Contains(option);
+        }
     }
 }
