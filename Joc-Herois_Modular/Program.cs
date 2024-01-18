@@ -22,7 +22,7 @@ namespace JocHerois
             const string MsgTitle = "         BENVINGUT/DA A\n" +
                                     "*********************************\n" +
                                     "        HEROIS VS MONSTRE\n" +
-                                    "*********************************";
+                                    "*********************************\n";
             const string MsgChooseOption = "Què vols fer? (Intents restants: {0}) \na. Partida Nova \nb. Sortir";
             const string MsgError = "Valor invàlid. Intents restants: {0}";
 
@@ -31,7 +31,10 @@ namespace JocHerois
             {
                 Console.WriteLine(MsgChooseOption, attempts);
                 option = Console.ReadLine().ToLower();
-                attempts--;
+                if (!GlobalMethods.ValidateOption(option, startMenuOptions))
+                {
+                    attempts--;
+                }
             } while (!GlobalMethods.ValidateOption(option, startMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
         }
     }
