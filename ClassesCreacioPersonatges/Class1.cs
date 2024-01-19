@@ -18,5 +18,9 @@
             }
             return true;
         }
+        public static string[] AssignCharacterNames(string names)
+        {
+            return names.Split(',');
+        }
     }
 }
