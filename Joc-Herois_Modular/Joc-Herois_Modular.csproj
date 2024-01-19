@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LlibreriaJoc\LlibreriaJoc.csproj" />
+	<ProjectReference Include="..\ClassesCreacioPersonatges\ClassesCreacioPersonatges.csproj" />
   </ItemGroup>
 
 </Project>

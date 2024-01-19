@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joc-Herois_Modular", "Joc-Herois_Modular\Joc-Herois_Modular.csproj", "{7636BF98-1180-440D-A16B-93017E91DBE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Joc-Herois_Modular", "Joc-Herois_Modular\Joc-Herois_Modular.csproj", "{7636BF98-1180-440D-A16B-93017E91DBE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlibreriaJoc", "LlibreriaJoc\LlibreriaJoc.csproj", "{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LlibreriaJoc", "LlibreriaJoc\LlibreriaJoc.csproj", "{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassesCreacioPersonatges", "ClassesCreacioPersonatges\ClassesCreacioPersonatges.csproj", "{38D9C0CB-9DE8-4710-A5A6-E4F620992ED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD52EABB-947F-4CCF-94E3-A15DF3AAFD96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38D9C0CB-9DE8-4710-A5A6-E4F620992ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38D9C0CB-9DE8-4710-A5A6-E4F620992ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38D9C0CB-9DE8-4710-A5A6-E4F620992ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38D9C0CB-9DE8-4710-A5A6-E4F620992ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
