@@ -10,5 +10,9 @@
         {
             return attempts > 0;
         }
+        public static bool CheckProgramEnd(string option)
+        {
+            return option == "b";
+        }
     }
 }
