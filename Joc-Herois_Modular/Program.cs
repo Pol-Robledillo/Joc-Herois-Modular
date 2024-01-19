@@ -12,6 +12,7 @@ namespace JocHerois
 
             int attempts = 3;
             string option, characterNames;
+            string[] characterNamesList = new string[4];
 
             //CONSTANTS
 
@@ -62,6 +63,12 @@ namespace JocHerois
                         attempts--;
                     }
                 } while (!CharacterCreation.ValidateNameFormat(characterNames, invalidCharacters) && GlobalMethods.ValidateAttempts(attempts));
+                if (GlobalMethods.ValidateAttempts(attempts))
+                {
+                    attempts = MaxAttempts;
+                    
+                    characterNamesList = CharacterCreation.AssignCharacterNames(characterNames);
+                }
             }
             if (!GlobalMethods.ValidateAttempts(attempts))
             {
