@@ -27,7 +27,6 @@ namespace JocHerois
 
             //MISSATGES
 
-            const string MsgMaxAttempts = "Has superat el límit d'intents";
             const string MsgTitle = "         BENVINGUT/DA A\n" +
                                     "*********************************\n" +
                                     "        HEROIS VS MONSTRE\n" +
@@ -35,45 +34,54 @@ namespace JocHerois
             const string MsgChooseOption = "Què vols fer? (Intents restants: {0}) \na. Partida Nova \nb. Sortir";
             const string MsgInputCharacterNames = "Introdueix els noms dels personatges, no poden contenir caràcters especials (Ex. nom,nom,nom,nom): ";
 
+            const string MsgMaxAttempts = "Has superat el límit d'intents";
+            const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
+
             //PROGRAMA
 
             Console.WriteLine(MsgTitle);
 
             do
             {
-                Console.WriteLine(MsgChooseOption, attempts);
-                option = Console.ReadLine().ToLower();
-                Console.WriteLine();
-                if (!GlobalMethods.ValidateOption(option, startMenuOptions))
-                {
-                    attempts--;
-                }
-            } while (!GlobalMethods.ValidateOption(option, startMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
-
-            if (GlobalMethods.ValidateAttempts(attempts))
-            {
-                attempts = MaxAttempts;
                 do
                 {
-                    Console.WriteLine(MsgInputCharacterNames, attempts);
-                    characterNames = Console.ReadLine();
+                    //ELECCIÓN OPCIÓN MENÚ PRINCIPAL
+                    Console.WriteLine(MsgChooseOption, attempts);
+                    option = Console.ReadLine().ToLower();
                     Console.WriteLine();
-                    if (!CharacterCreation.ValidateNameFormat(characterNames, invalidCharacters))
+                    if (!GlobalMethods.ValidateOption(option, startMenuOptions))
                     {
                         attempts--;
                     }
-                } while (!CharacterCreation.ValidateNameFormat(characterNames, invalidCharacters) && GlobalMethods.ValidateAttempts(attempts));
-                if (GlobalMethods.ValidateAttempts(attempts))
+                } while (!GlobalMethods.ValidateOption(option, startMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+
+                if (GlobalMethods.ValidateAttempts(attempts) && !GlobalMethods.CheckProgramEnd(option))
                 {
                     attempts = MaxAttempts;
-                    
-                    characterNamesList = CharacterCreation.AssignCharacterNames(characterNames);
+                    do
+                    {
+                        //INTRODUCCIÓN NOMBRES PERSONAJES
+                        Console.WriteLine(MsgInputCharacterNames, attempts);
+                        characterNames = Console.ReadLine();
+                        Console.WriteLine();
+                        if (!CharacterCreation.ValidateNameFormat(characterNames, invalidCharacters))
+                        {
+                            attempts--;
+                        }
+                    } while (!CharacterCreation.ValidateNameFormat(characterNames, invalidCharacters) && GlobalMethods.ValidateAttempts(attempts));
+                    if (GlobalMethods.ValidateAttempts(attempts))
+                    {
+                        attempts = MaxAttempts;
+
+                        characterNamesList = CharacterCreation.AssignCharacterNames(characterNames);
+                    }
                 }
-            }
-            if (!GlobalMethods.ValidateAttempts(attempts))
-            {
-                Console.WriteLine(MsgMaxAttempts);
-            }
+                if (!GlobalMethods.ValidateAttempts(attempts))
+                {
+                    Console.WriteLine(MsgMaxAttempts);
+                }
+            } while (!GlobalMethods.CheckProgramEnd(option) && GlobalMethods.ValidateAttempts(attempts));
+            Console.WriteLine(MsgGameExit);
         }
     }
 }
