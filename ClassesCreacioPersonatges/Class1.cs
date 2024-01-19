@@ -11,6 +11,11 @@
                     return false;
                 }
             }
+            string[] characterNames = name.Split(',');
+            if (characterNames.Length != 4)
+            {
+                return false;
+            }
             return true;
         }
     }
