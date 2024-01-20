@@ -11,7 +11,7 @@ namespace JocHerois
             //VARIABLES
 
             int attempts = 3;
-            string option, characterNames;
+            string option, characterNames, difficulty;
             string[] characterNamesList = new string[4];
 
             //CONSTANTS
@@ -24,6 +24,7 @@ namespace JocHerois
                                            "·", "$", "%", "&", "/", "=",
                                            "+", "*", "ª", "º", "<", ">",
                                            "¬", "¨", "´", "`", "€", "£" };
+            string[] difficultyMenuOptions = { "a", "b", "c", "d" };
 
             //MISSATGES
 
@@ -36,16 +37,16 @@ namespace JocHerois
 
             const string MsgMaxAttempts = "Has superat el límit d'intents";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
+            const string MsgChooseDifficulty = "Escull la dificultat (Intents restants: {0}): \na. Fàcil (Max. stats herois, Min. stats monstre) \nb. Difícil (Min. stats herois, Max. stats monstre) \nc. Personalitzat (Escull les stats del herois i del monstre) \nd. Aleatori (S'assignen stats aleatòries)";
 
             //PROGRAMA
 
-            Console.WriteLine(MsgTitle);
-
             do
             {
+                Console.WriteLine(MsgTitle);
                 do
                 {
-                    //ELECCIÓN OPCIÓN MENÚ PRINCIPAL
+                    //ELECCIÓ OPCIÓ MENÚ PRINCIPAL
                     Console.WriteLine(MsgChooseOption, attempts);
                     option = Console.ReadLine().ToLower();
                     Console.WriteLine();
@@ -60,7 +61,7 @@ namespace JocHerois
                     attempts = MaxAttempts;
                     do
                     {
-                        //INTRODUCCIÓN NOMBRES PERSONAJES
+                        //INTRODUCCIÓ NOMS PERSONATGES
                         Console.WriteLine(MsgInputCharacterNames, attempts);
                         characterNames = Console.ReadLine();
                         Console.WriteLine();
@@ -74,6 +75,19 @@ namespace JocHerois
                         attempts = MaxAttempts;
 
                         characterNamesList = CharacterCreation.AssignCharacterNames(characterNames);
+
+                        do
+                        {
+                            //ELECCIÓ OPCIÓ MENÚ DIFICULTAT
+                            Console.WriteLine(MsgChooseDifficulty, attempts);
+                            difficulty = Console.ReadLine().ToLower();
+                            Console.WriteLine();
+                            if (!GlobalMethods.ValidateOption(difficulty, difficultyMenuOptions))
+                            {
+                                attempts--;
+                            }
+                        } while (!GlobalMethods.ValidateOption(difficulty, difficultyMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+
                     }
                 }
                 if (!GlobalMethods.ValidateAttempts(attempts))
