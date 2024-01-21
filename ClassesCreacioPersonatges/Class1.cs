@@ -1,4 +1,7 @@
-﻿namespace ClassesCreacioPersonatges
+﻿using static System.Net.Mime.MediaTypeNames;
+using System;
+
+namespace ClassesCreacioPersonatges
 {
     public class CharacterCreation
     {
@@ -22,18 +25,58 @@
         {
             return names.Split(',');
         }
-        public static int[,] AssignCharacterStats(int[,] stats, int[,] statsBase, int characters, int statTypes)
+        public static int[,] AssignStats(int[,] stats, int[,] statsBase, int characters, int statTypes)
         {
             for (int i = 0; i < characters; i++)
             {
                 for (int j = 0; j < statTypes; j++)
                 {
                     stats[i, j] = statsBase[i, j];
-                    Console.Write(stats[i, j]);
                 }
-                Console.WriteLine();
             }
             return stats;
+        }
+        public static int[] AssignStats(int[] stats, int[] statsBase)
+        {
+            for (int i = 0; i < stats.Length; i++)
+            {
+                stats[i] = statsBase[i];
+            }
+            return stats;
+        }
+        public static bool ValidateStatRange(int stat, int min, int max)
+        {
+            return stat >= min && stat <= max;
+        }
+        public static string AssignNameMessage(int character, string ArcherMSG, string BarbarianMSG, string MageMSG, string DruidMSG)
+        {
+            switch (character)
+            {
+                case 0:
+                    return ArcherMSG;
+                case 1:
+                    return BarbarianMSG;
+                case 2:
+                    return MageMSG;
+                case 3:
+                    return DruidMSG;
+                default:
+                    return "";
+            }
+        }
+        public static string AssignStatMessage(int character, string HP, string ATK, string DEF)
+        {
+            switch (character)
+            {
+                case 0:
+                    return HP;
+                case 1:
+                    return ATK;
+                case 2:
+                    return DEF;
+                default:
+                    return "";
+            }
         }
     }
 }
