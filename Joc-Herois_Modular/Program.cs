@@ -8,15 +8,13 @@ namespace JocHerois
     {
         public static void Main()
         {
-            //VARIABLES
-
-            int attempts = 3;
-            string option, characterNames, difficulty;
-            string[] characterNamesList = new string[4];
-
             //CONSTANTS
 
-            const int MaxAttempts = 3;
+            const int Characters = 4, StatTypes = 4, MaxAttempts = 3, Archer = 0, Barbarian = 1, Mage = 2, Druid = 3, HP = 0, ATK = 1, DEF = 2, SkillCD = 3, MaxSkillCD = 5;
+            int[,] MinStats = { { 1500, 200, 25, 0 },
+                                { 3000, 150, 35, 0 },
+                                { 1100, 300, 20, 0 },
+                                { 2000, 70, 25, 0 } };
             string[] startMenuOptions = { "a", "b" };
             string[] invalidCharacters = { " ", ".", ";", ":", "-", "_",
                                            "!", "¡", "?", "¿", "(", ")",
@@ -38,6 +36,13 @@ namespace JocHerois
             const string MsgMaxAttempts = "Has superat el límit d'intents";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
             const string MsgChooseDifficulty = "Escull la dificultat (Intents restants: {0}): \na. Fàcil (Max. stats herois, Min. stats monstre) \nb. Difícil (Min. stats herois, Max. stats monstre) \nc. Personalitzat (Escull les stats del herois i del monstre) \nd. Aleatori (S'assignen stats aleatòries)";
+
+            //VARIABLES
+
+            int attempts = 3;
+            int[,] characterStats = new int[Characters, StatTypes];
+            string option, characterNames, difficulty;
+            string[] characterNamesList = new string[Characters];
 
             //PROGRAMA
 
@@ -87,7 +92,29 @@ namespace JocHerois
                                 attempts--;
                             }
                         } while (!GlobalMethods.ValidateOption(difficulty, difficultyMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
-
+                        if (GlobalMethods.ValidateAttempts(attempts))
+                        {
+                            attempts = MaxAttempts;
+                            switch (difficulty)
+                            {
+                                case "a":
+                                    //FÀCIL
+                                    characterStats = CharacterCreation.AssignCharacterStats(characterStats, MinStats, Characters, StatTypes);
+                                    break;
+                                case "b":
+                                    //DIFÍCIL
+                                    //CharacterCreation.StartGame(characterNamesList, 2);
+                                    break;
+                                case "c":
+                                    //PERSONALITZAT
+                                    //CharacterCreation.StartGame(characterNamesList, 3);
+                                    break;
+                                case "d":
+                                    //ALEATORI
+                                    //CharacterCreation.StartGame(characterNamesList, 4);
+                                    break;
+                            }
+                        }
                     }
                 }
                 if (!GlobalMethods.ValidateAttempts(attempts))
