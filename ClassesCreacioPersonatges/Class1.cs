@@ -22,5 +22,18 @@
         {
             return names.Split(',');
         }
+        public static int[,] AssignCharacterStats(int[,] stats, int[,] statsBase, int characters, int statTypes)
+        {
+            for (int i = 0; i < characters; i++)
+            {
+                for (int j = 0; j < statTypes; j++)
+                {
+                    stats[i, j] = statsBase[i, j];
+                    Console.Write(stats[i, j]);
+                }
+                Console.WriteLine();
+            }
+            return stats;
+        }
     }
 }
