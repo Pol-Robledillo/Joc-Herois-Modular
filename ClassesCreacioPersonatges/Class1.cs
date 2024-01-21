@@ -78,5 +78,29 @@ namespace ClassesCreacioPersonatges
                     return "";
             }
         }
+        public static int[,] AssignStats(int[,] stats, int[,] minStats, int[,] maxStats, int characters, int statTypes)
+        {
+            for (int i = 0; i < characters; i++)
+            {
+                for (int j = 0; j < statTypes; j++)
+                {
+                    stats[i, j] = GenerateRandom(minStats[i, j], maxStats[i, j]);
+                }
+            }
+            return stats;
+        }
+        public static int[] AssignStats(int[] stats, int[] minStats, int[] maxStats)
+        {
+            for (int i = 0; i < stats.Length; i++)
+            {
+                stats[i] = GenerateRandom(minStats[i], maxStats[i]);
+            }
+            return stats;
+        }
+        public static int GenerateRandom(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max + 1);
+        }
     }
 }
