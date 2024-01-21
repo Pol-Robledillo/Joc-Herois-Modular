@@ -15,6 +15,10 @@ namespace JocHerois
                                 { 3000, 150, 35, 0 },
                                 { 1100, 300, 20, 0 },
                                 { 2000, 70, 25, 0 } };
+            int[,] MaxStats = { { 2000, 300, 35, 0 },
+                                { 3750, 250, 45, 0 },
+                                { 1500, 400, 35, 0 },
+                                { 2500, 120, 40, 0 } };
             string[] startMenuOptions = { "a", "b" };
             string[] invalidCharacters = { " ", ".", ";", ":", "-", "_",
                                            "!", "¡", "?", "¿", "(", ")",
@@ -103,7 +107,7 @@ namespace JocHerois
                                     break;
                                 case "b":
                                     //DIFÍCIL
-                                    //CharacterCreation.StartGame(characterNamesList, 2);
+                                    characterStats = CharacterCreation.AssignCharacterStats(characterStats, MaxStats, Characters, StatTypes);
                                     break;
                                 case "c":
                                     //PERSONALITZAT
