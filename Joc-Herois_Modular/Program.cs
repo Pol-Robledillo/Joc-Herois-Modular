@@ -46,14 +46,22 @@ namespace JocHerois
                                     "*********************************\n";
             const string MsgChooseOption = "Què vols fer? (Intents restants: {0}) \na. Partida Nova \nb. Sortir";
             const string MsgInputCharacterNames = "Introdueix els noms dels personatges, no poden contenir caràcters especials (Ex. nom,nom,nom,nom): ";
+            const string MsgChooseDifficulty = "Escull la dificultat (Intents restants: {0}): " +
+                                             "\na. Fàcil (Max. stats herois, Min. stats monstre) " +
+                                             "\nb. Difícil (Min. stats herois, Max. stats monstre) " +
+                                             "\nc. Personalitzat (Escull les stats del herois i del monstre) " +
+                                             "\nd. Aleatori (S'assignen stats aleatòries)";
             const string MsgEasyDifficulty = "Has escollit la dificultat fàcil. Se li han assignat les stats màximes als herois i les mínimes al monstre.";
             const string MsgHardDifficulty = "Has escollit la dificultat difícil. Se li han assignat les stats mínimes als herois i les màximes al monstre.";
             const string MsgInputCharacterStats = "Introdueix la stat {0} de {1} [{2} - {3}] (Intents restants: {4}): ";
             const string MsgMinStat = "Has superat el límit d'intents per aquesta stat, se li assignarà el valor mínim: {0}.";
             const string MsgMaxStat = "Has superat el límit d'intents per aquesta stat, se li assignarà el valor màxim: {0}.";
+            const string MsgCharacterStats = "Les stats dels herois són: \nNom\tVida\tAtac\tDefensa";
+            const string MsgShowCharacterStats = "{0}\t{1}\t{2}\t{3}";
+            const string MsgMonsterStats = "Les stats del monstre són: \nVida\tAtac\tDefensa";
+            const string MsgShowMonsterStats = "{0}\t{1}\t{2}";
             const string MsgMaxAttempts = "Has superat el límit d'intents";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
-            const string MsgChooseDifficulty = "Escull la dificultat (Intents restants: {0}): \na. Fàcil (Max. stats herois, Min. stats monstre) \nb. Difícil (Min. stats herois, Max. stats monstre) \nc. Personalitzat (Escull les stats del herois i del monstre) \nd. Aleatori (S'assignen stats aleatòries)";
 
             //VARIABLES
 
@@ -194,14 +202,21 @@ namespace JocHerois
                                     break;
                                 case "d":
                                     //ALEATORI
-                                    //CharacterCreation.StartGame(characterNamesList, 4);
+                                    characterStats = CharacterCreation.AssignStats(characterStats, MinStats, MaxStats, Characters, StatTypes);
+                                    monsterStats = CharacterCreation.AssignStats(monsterStats, MonsterMinStats, MonsterMaxStats);
                                     break;
                             }
-                            for (int i = 0; i < characterNamesList.Length; i++)
+                            Console.WriteLine(MsgCharacterStats);
+                            for (int i = 0; i < Characters; i++)
                             {
-                                characterMSG = CharacterCreation.AssignNameMessage(i, ArcherMSG, BarbarianMSG, MageMSG, DruidMSG);
-                                Console.WriteLine("{0}: {1} {2} {3} {4}", characterMSG, characterNamesList[i], characterStats[i, HP], characterStats[i, ATK], characterStats[i, DEF]);
+                                Console.WriteLine(MsgShowCharacterStats, characterNamesList[i], characterStats[i, HP], characterStats[i, ATK], characterStats[i, DEF]);
                             }
+                            Console.WriteLine();
+                            Console.WriteLine(MsgMonsterStats);
+                            Console.WriteLine(MsgShowMonsterStats, monsterStats[HP], monsterStats[ATK], monsterStats[DEF]);
+                            Console.WriteLine();
+                            Console.WriteLine(MsgPressEnter);
+                            Console.ReadLine();
                         }
                     }
                 }
