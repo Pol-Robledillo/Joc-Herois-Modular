@@ -173,7 +173,7 @@ namespace JocHerois
                                     {
                                         attempts = MaxAttempts;
                                         characterMSG = MonsterMSG;
-                                        statMSG = CharacterCreation.AssignStatMessage(j, HPMSG, ATKMSG, DEFMSG);
+                                        statMSG = CharacterCreation.AssignStatMessage(i, HPMSG, ATKMSG, DEFMSG);
 
                                         do
                                         {
