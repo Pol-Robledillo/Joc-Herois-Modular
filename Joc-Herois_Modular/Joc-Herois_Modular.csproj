@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CombatMethods\CombatMethods.csproj" />
     <ProjectReference Include="..\LlibreriaJoc\LlibreriaJoc.csproj" />
 	<ProjectReference Include="..\ClassesCreacioPersonatges\ClassesCreacioPersonatges.csproj" />
   </ItemGroup>
