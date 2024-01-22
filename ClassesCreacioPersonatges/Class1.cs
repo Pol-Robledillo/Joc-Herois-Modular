@@ -102,5 +102,26 @@ namespace ClassesCreacioPersonatges
             Random random = new Random();
             return random.Next(min, max + 1);
         }
+        public static double[] AssignCurrentHP(double[] currentHP, int[,] characters, int HP)
+        {
+            for (int i = 0; i < currentHP.Length; i++)
+            {
+                currentHP[i] = characters[i, HP];
+            }
+            return currentHP;
+        }
+        public static double AssignCurrentHP(int[] monster, int HP)
+        {
+            return monster[HP];
+        }
+        public static double AssignTotalHP(double[] charactersHP)
+        {
+            double totalHP = 0;
+            for (int i = 0; i < charactersHP.Length; i++)
+            {
+                totalHP += charactersHP[i];
+            }
+            return totalHP;
+        }
     }
 }

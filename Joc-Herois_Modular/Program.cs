@@ -1,5 +1,6 @@
 ﻿using LlibreriaJoc;
 using ClassesCreacioPersonatges;
+using CombatMethods;
 using System;
 
 namespace JocHerois
@@ -60,12 +61,18 @@ namespace JocHerois
             const string MsgShowCharacterStats = "{0}\t{1}\t{2}\t{3}";
             const string MsgMonsterStats = "Les stats del monstre són: \nVida\tAtac\tDefensa";
             const string MsgShowMonsterStats = "{0}\t{1}\t{2}";
+            const string MsgShowMonsterHP = "Vida del monstre: {0}";
+            const string MsgYouWin = "Has guanyat!";
+            const string MsgYouLose = "Has perdut!";
             const string MsgMaxAttempts = "Has superat el límit d'intents";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
 
             //VARIABLES
 
+            double totalHP, currentHPMonster;
+            double[] currentHP = new double[Characters];
             int attempts = 3;
+            int[] aliveCharacters = { 0, 1, 2, 3 };
             int[] monsterStats = new int[3];
             int[,] characterStats = new int[Characters, StatTypes];
             string option, characterNames, difficulty, characterMSG = "", statMSG = "";
@@ -217,6 +224,26 @@ namespace JocHerois
                             Console.WriteLine();
                             Console.WriteLine(MsgPressEnter);
                             Console.ReadLine();
+                            currentHP = CharacterCreation.AssignCurrentHP(currentHP, characterStats, HP);
+                            currentHPMonster = CharacterCreation.AssignCurrentHP(monsterStats, HP);
+                            totalHP = CharacterCreation.AssignTotalHP(currentHP);
+
+                            //COMBAT
+                            do
+                            {
+                                Combat.ShowHP(currentHP, characterNamesList);
+                                Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
+
+                                totalHP = CharacterCreation.AssignTotalHP(currentHP);
+                            } while (Combat.ValidateHP(totalHP) && Combat.ValidateHP(currentHPMonster));
+                            if (Combat.ValidateHP(totalHP))
+                            {
+                                Console.WriteLine(MsgYouWin);
+                            }
+                            else
+                            {
+                                Console.WriteLine(MsgYouLose);
+                            }
                         }
                     }
                 }
