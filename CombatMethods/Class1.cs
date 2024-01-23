@@ -3,6 +3,20 @@ namespace CombatMethods
 {
     public class Combat
     {
+        public static int[] ArrangeNumsList(int[] characterNums, int num, int position)
+        {
+            int aux;
+            for (int i = 0; i < characterNums.Length; i++)
+            {
+                if (characterNums[i] == num)
+                {
+                    aux = characterNums[i];
+                    characterNums[i] = characterNums[position];
+                    characterNums[position] = aux;
+                }
+            }
+            return characterNums;
+        }
         public static bool ValidateHP(double hp)
         {
             return hp > 0;
@@ -43,7 +57,7 @@ namespace CombatMethods
         }
         public static double Attack(double attack, double defense)
         {
-            return attack - (attack * (defense * 100));
+            return attack - (attack * (defense / 100));
         }
         public static bool CalcProbability(int probability)
         {
@@ -53,6 +67,14 @@ namespace CombatMethods
         public static bool ValidateOverHeal(double hp, int maxHP)
         {
             return hp > maxHP;
+        }
+        public static bool ValidateStunMonster(int stunMonster)
+        {
+            return stunMonster > 0;
+        }
+        public static bool ValidateBarbarianSkill(int skill)
+        {
+            return skill > 0;
         }
     }
 }

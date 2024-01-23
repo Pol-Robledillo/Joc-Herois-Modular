@@ -17,7 +17,7 @@ namespace JocHerois
             int[,] MinStats = { { 1500, 200, 25, 0 },
                                 { 3000, 150, 35, 0 },
                                 { 1100, 300, 20, 0 },
-                                { 2000, 70, 25, 0 } };
+                                { 2000, 100, 25, 0 } };
             int[,] MaxStats = { { 2000, 300, 35, 0 },
                                 { 3750, 250, 45, 0 },
                                 { 1500, 400, 35, 0 },
@@ -68,14 +68,17 @@ namespace JocHerois
             const string MsgShowMonsterStats = "{0}\t{1}\t{2}";
             const string MsgShowMonsterHP = "Vida del monstre: {0}";
             const string MsgRound = "RONDA {0}";
-            const string MsgSelectAction = "{0} \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
-            const string MsgMissedAtack = "Has fallat l'atac!";
+            const string MsgSelectAction = "Torn de {0}! \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
+            const string MsgMissedAtack = "{0} ha fallat l'atac!";
             const string MsgAttack = "{0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
             const string MsgCritAttack = "Atac crític! {0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
+            const string MsgCharacterDefends = "{0} augmenta la seva defensa al doble durant aquesta ronda.";
             const string MsgArcherSkill = "El monstre està atordit durant 2 torns.";
             const string MsgBarbarianSkill = "La defensa de {0} s'ha augmentat al 100% durant 3 torns.";
             const string MsgMageSkill = "{0} li llença una bola de foc al monstre.";
             const string MsgDruidSkill = "{0} ha curat 500 de vida a tots els herois vius.";
+            const string MsgMonsterStunned = "El monstre està atordit i no pot atacar.";
+            const string MsgCharacterDead = "{0} ha mort.";
             const string MsgYouWin = "Has guanyat!";
             const string MsgYouLose = "Has perdut!";
             const string MsgSkipTurn = "S'ha saltat el torn.";
@@ -87,31 +90,35 @@ namespace JocHerois
             bool[] charactersDefending = { false, false, false, false };
             double totalHP, currentHPMonster, atkDamage;
             double[] currentHP = new double[Characters];
-            int attempts = 3, round = 1, tornPersonatge, monsterStunned, barbarianSkill;
-            int[] usedCharacters = new int[4];
+            int count, attempts = 3, round = 1, tornPersonatge, monsterStunned = 0, barbarianSkill = 0, charactersAlive = 4, prevCharsAlive = charactersAlive;
+            int[] characterNums = { 0, 1, 2, 3 };
+            int[] ThreeCharactersAlive = new int[3];
+            int[] TwoCharactersAlive = new int[2];
+            int[] OneCharacterAlive = new int[1];
             int[] monsterStats = new int[3];
             int[,] characterStats = new int[Characters, StatTypes];
-            string option, characterNames, difficulty, characterMSG = "", statMSG = "";
+            string startOption, option, characterNames, difficulty, characterMSG, statMSG;
             string[] characterNamesList = new string[Characters];
 
             //PROGRAMA
 
             do
             {
+                Console.Clear();
                 Console.WriteLine(MsgTitle);
                 do
                 {
                     //ELECCIÓ OPCIÓ MENÚ PRINCIPAL
                     Console.WriteLine(MsgChooseOption, attempts);
-                    option = Console.ReadLine().ToLower();
+                    startOption = Console.ReadLine().ToLower();
                     Console.WriteLine();
-                    if (!GlobalMethods.ValidateOption(option, startMenuOptions))
+                    if (!GlobalMethods.ValidateOption(startOption, startMenuOptions))
                     {
                         attempts--;
                     }
-                } while (!GlobalMethods.ValidateOption(option, startMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+                } while (!GlobalMethods.ValidateOption(startOption, startMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
 
-                if (GlobalMethods.ValidateAttempts(attempts) && !GlobalMethods.CheckProgramEnd(option))
+                if (GlobalMethods.ValidateAttempts(attempts) && !GlobalMethods.CheckProgramEnd(startOption))
                 {
                     Console.Clear();
                     attempts = MaxAttempts;
@@ -242,26 +249,39 @@ namespace JocHerois
                             Console.ReadLine();
                             currentHP = CharacterCreation.AssignCurrentHP(currentHP, characterStats, HP);
                             currentHPMonster = CharacterCreation.AssignCurrentHP(monsterStats, HP);
-                            totalHP = CharacterCreation.AssignTotalHP(currentHP);
 
                             //COMBAT
                             do
                             {
-                                Console.Clear();
-                                Console.WriteLine(MsgRound, round);
-                                Combat.ShowHP(currentHP, characterNamesList);
-                                Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
-
-                                for (int i = 0; i < Characters; i++)
+                                for (int i = 0; i < charactersAlive; i++)
                                 {
+                                    Console.Clear();
+                                    Console.WriteLine(MsgRound, round);
+                                    Combat.ShowHP(currentHP, characterNamesList);
+                                    Console.WriteLine();
+                                    Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
+                                    Console.WriteLine();
                                     attempts = MaxAttempts;
-                                    do
-                                    {
-                                        tornPersonatge = GlobalMethods.GenerateRandom(0, Characters - 1);
-                                    } while (usedCharacters.Contains(tornPersonatge) || !Combat.ValidateHP(currentHP[tornPersonatge]));
-                                    usedCharacters[i] = tornPersonatge;
+                                    prevCharsAlive = charactersAlive;
 
-                                    Console.WriteLine(characterNamesList[tornPersonatge]);
+                                    switch (charactersAlive)
+                                    {
+                                        default:
+                                            tornPersonatge = characterNums[GlobalMethods.GenerateRandom(characterNums.Length - i)];
+                                            characterNums = Combat.ArrangeNumsList(characterNums, tornPersonatge, characterNums.Length - (i + 1));
+                                            break;
+                                        case 3:
+                                            tornPersonatge = ThreeCharactersAlive[GlobalMethods.GenerateRandom(ThreeCharactersAlive.Length - i)];
+                                            ThreeCharactersAlive = Combat.ArrangeNumsList(ThreeCharactersAlive, tornPersonatge, ThreeCharactersAlive.Length - (i + 1));
+                                            break;
+                                        case 2:
+                                            tornPersonatge = TwoCharactersAlive[GlobalMethods.GenerateRandom(TwoCharactersAlive.Length - i)];
+                                            TwoCharactersAlive = Combat.ArrangeNumsList(TwoCharactersAlive, tornPersonatge, TwoCharactersAlive.Length - (i + 1));
+                                            break;
+                                        case 1:
+                                            tornPersonatge = OneCharacterAlive[GlobalMethods.GenerateRandom(OneCharacterAlive.Length)];
+                                            break;
+                                    }
 
                                     do
                                     {
@@ -269,11 +289,11 @@ namespace JocHerois
                                         Console.WriteLine(MsgSelectAction, characterNamesList[tornPersonatge], attempts, skills[tornPersonatge]);
                                         option = Console.ReadLine().ToLower();
                                         Console.WriteLine();
-                                        if (!GlobalMethods.ValidateOption(option, actionMenuOptions))
+                                        if (!GlobalMethods.ValidateOption(option, actionMenuOptions) || Combat.ValidateSkillCD(option, characterStats[tornPersonatge, SkillCD]))
                                         {
                                             attempts--;
                                         }
-                                    } while (!GlobalMethods.ValidateOption(option, actionMenuOptions) && GlobalMethods.ValidateAttempts(attempts) && Combat.ValidateSkillCD(option, characterStats[tornPersonatge, SkillCD]));
+                                    } while ((!GlobalMethods.ValidateOption(option, actionMenuOptions) || Combat.ValidateSkillCD(option, characterStats[tornPersonatge, SkillCD])) && GlobalMethods.ValidateAttempts(attempts));
                                     if (!GlobalMethods.ValidateAttempts(attempts))
                                     {
                                         Console.WriteLine(MsgMaxAttempts + MsgSkipTurn);
@@ -286,25 +306,35 @@ namespace JocHerois
                                                 //ATACAR
                                                 if (Combat.CalcProbability(MissProb))
                                                 {
-                                                    Console.WriteLine(MsgMissedAtack);
+                                                    Console.WriteLine(MsgMissedAtack, characterNamesList[tornPersonatge]);
                                                 }
                                                 else
                                                 {
                                                     atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK], monsterStats[DEF]);
                                                     if (Combat.CalcProbability(CritRate))
                                                     {
-                                                        currentHPMonster -= atkDamage * 2;
+                                                        atkDamage *= 2;
+                                                        currentHPMonster -= atkDamage;
+                                                        if (currentHPMonster < 0)
+                                                        {
+                                                            currentHPMonster = 0;
+                                                        }
                                                         Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
                                                     }
                                                     else
                                                     {
                                                         currentHPMonster -= atkDamage;
+                                                        if (currentHPMonster < 0)
+                                                        {
+                                                            currentHPMonster = 0;
+                                                        }
                                                         Console.WriteLine(MsgAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
                                                     }
                                                 }
                                                 break;
                                             case "b":
                                                 //DEFENSAR
+                                                Console.WriteLine(MsgCharacterDefends, characterNamesList[tornPersonatge]);
                                                 charactersDefending[tornPersonatge] = true;
                                                 break;
                                             case "c":
@@ -323,19 +353,28 @@ namespace JocHerois
                                                         Console.WriteLine(MsgMageSkill, characterNamesList[tornPersonatge]);
                                                         if (Combat.CalcProbability(MissProb))
                                                         {
-                                                            Console.WriteLine(MsgMissedAtack);
+                                                            Console.WriteLine(MsgMissedAtack, characterNamesList[tornPersonatge]);
                                                         }
                                                         else
                                                         {
                                                             atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK] * 3, monsterStats[DEF]);
                                                             if (Combat.CalcProbability(CritRate))
                                                             {
-                                                                currentHPMonster -= atkDamage * 2;
+                                                                atkDamage *= 2;
+                                                                currentHPMonster -= atkDamage;
+                                                                if (currentHPMonster < 0)
+                                                                {
+                                                                    currentHPMonster = 0;
+                                                                }
                                                                 Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
                                                             }
                                                             else
                                                             {
                                                                 currentHPMonster -= atkDamage;
+                                                                if (currentHPMonster < 0)
+                                                                {
+                                                                    currentHPMonster = 0;
+                                                                }
                                                                 Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
                                                             }
                                                         }
@@ -358,7 +397,85 @@ namespace JocHerois
                                                 characterStats[tornPersonatge, SkillCD] = MaxSkillCD;
                                                 break;
                                         }
+                                        if (!Combat.ValidateHP(currentHPMonster))
+                                        {
+                                            i = Characters;
+                                        }
                                     }
+                                    Console.WriteLine(MsgPressEnter);
+                                    Console.ReadLine();
+                                }
+                                Console.Clear();
+                                //ATAC MONSTRE
+                                if (Combat.ValidateHP(currentHPMonster))
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(MsgRound, round);
+                                    Combat.ShowHP(currentHP, characterNamesList);
+                                    Console.WriteLine();
+                                    Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
+                                    Console.WriteLine();
+                                    if (Combat.ValidateStunMonster(monsterStunned))
+                                    {
+                                        Console.WriteLine(MsgMonsterStunned);
+                                        monsterStunned--;
+                                    }
+                                    else
+                                    {
+                                        for (int i = 0; i < Characters; i++)
+                                        {
+                                            if (Combat.ValidateHP(currentHP[i]))
+                                            {
+                                                if (Combat.CalcProbability(MissProb))
+                                                {
+                                                    Console.WriteLine(MsgMissedAtack, MonsterMSG);
+                                                }
+                                                else
+                                                {
+                                                    if (i == 1 && Combat.ValidateBarbarianSkill(barbarianSkill))
+                                                    {
+                                                        atkDamage = Combat.Attack(monsterStats[ATK], 100);
+                                                        barbarianSkill--;
+                                                    }
+                                                    else if (charactersDefending[i])
+                                                    {
+                                                        atkDamage = Combat.Attack(monsterStats[ATK], characterStats[i, DEF] * 2);
+                                                    }
+                                                    else
+                                                    {
+                                                        atkDamage = Combat.Attack(monsterStats[ATK], characterStats[i, DEF]);
+                                                    }
+
+                                                    if (Combat.CalcProbability(CritRate))
+                                                    {
+                                                        atkDamage *= 2;
+                                                        currentHP[i] -= atkDamage;
+                                                        if (currentHP[i] < 0)
+                                                        {
+                                                            currentHP[i] = 0;
+                                                        }
+                                                        Console.WriteLine(MsgCritAttack, MonsterMSG, characterNamesList[i], monsterStats[ATK], atkDamage, currentHP[i]);
+                                                    }
+                                                    else
+                                                    {
+                                                        currentHP[i] -= atkDamage;
+                                                        if (currentHP[i] < 0)
+                                                        {
+                                                            currentHP[i] = 0;
+                                                        }
+                                                        Console.WriteLine(MsgAttack, MonsterMSG, characterNamesList[i], monsterStats[ATK], atkDamage, currentHP[i]);
+                                                    }
+                                                }
+                                                if (!Combat.ValidateHP(currentHP[i]))
+                                                {
+                                                    Console.WriteLine(MsgCharacterDead, characterNamesList[i]);
+                                                    charactersAlive--;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    Console.WriteLine(MsgPressEnter);
+                                    Console.ReadLine();
                                 }
 
                                 //ACTUALITZACIÓ STATS
@@ -373,7 +490,45 @@ namespace JocHerois
                                 {
                                     charactersDefending[i] = false;
                                 }
+                                if (prevCharsAlive != charactersAlive)
+                                {
+                                    count = 0;
+                                    switch (charactersAlive)
+                                    {
+                                        case 3:
+                                            for (int i = 0; i < characterNums.Length && count < 3; i++)
+                                            {
+                                                if (Combat.ValidateHP(currentHP[characterNums[i]]))
+                                                {
+                                                    ThreeCharactersAlive[count] = characterNums[i];
+                                                    count++;
+                                                }
+                                            }
+                                            break;
+                                        case 2:
+                                            for (int i = 0; i < characterNums.Length && count < 2; i++)
+                                            {
+                                                if (Combat.ValidateHP(currentHP[characterNums[i]]))
+                                                {
+                                                    TwoCharactersAlive[count] = characterNums[i];
+                                                    count++;
+                                                }
+                                            }
+                                            break;
+                                        case 1:
+                                            for (int i = 0; i < characterNums.Length && count < 1; i++)
+                                            {
+                                                if (Combat.ValidateHP(currentHP[characterNums[i]]))
+                                                {
+                                                    OneCharacterAlive[count] = characterNums[i];
+                                                    count++;
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
                                 totalHP = CharacterCreation.AssignTotalHP(currentHP);
+                                round++;
                             } while (Combat.ValidateHP(totalHP) && Combat.ValidateHP(currentHPMonster));
                             if (Combat.ValidateHP(totalHP))
                             {
@@ -383,14 +538,24 @@ namespace JocHerois
                             {
                                 Console.WriteLine(MsgYouLose);
                             }
+                            attempts = MaxAttempts;
+                            Console.WriteLine(MsgPressEnter);
+                            Console.ReadLine();
+                            round = 1;
+                            monsterStunned = 0;
+                            barbarianSkill = 0;
+                            charactersAlive = 4;
+                            prevCharsAlive = charactersAlive;
                         }
                     }
                 }
                 if (!GlobalMethods.ValidateAttempts(attempts))
                 {
                     Console.WriteLine(MsgMaxAttempts);
+                    Console.WriteLine(MsgPressEnter);
+                    Console.ReadLine();
                 }
-            } while (!GlobalMethods.CheckProgramEnd(option) && GlobalMethods.ValidateAttempts(attempts));
+            } while (!GlobalMethods.CheckProgramEnd(startOption) && GlobalMethods.ValidateAttempts(attempts));
             Console.WriteLine(MsgGameExit);
         }
     }
