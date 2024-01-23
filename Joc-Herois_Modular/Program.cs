@@ -189,7 +189,7 @@ namespace JocHerois
                                     }
                                     for (int i = 0; i < Characters; i++)
                                     {
-                                        characterStats[i, SkillCD] = MaxSkillCD;
+                                        characterStats[i, SkillCD] = 0;
                                     }
                                     for (int i = 0; i < monsterStats.Length; i++)
                                     {
@@ -260,7 +260,7 @@ namespace JocHerois
                                         {
                                             attempts--;
                                         }
-                                    } while (!GlobalMethods.ValidateOption(option, actionMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+                                    } while (!GlobalMethods.ValidateOption(option, actionMenuOptions) && GlobalMethods.ValidateAttempts(attempts) && Combat.ValidateSkillCD(option, characterStats[tornPersonatge, SkillCD]));
                                     if (!GlobalMethods.ValidateAttempts(attempts))
                                     {
                                         Console.WriteLine(MsgMaxAttempts + MsgSkipTurn);
@@ -283,7 +283,13 @@ namespace JocHerois
                                         }
                                     }
                                 }
-
+                                for (int i = 0; i < Characters; i++)
+                                {
+                                    if (Combat.ValidateSkillCD(characterStats[i, SkillCD]))
+                                    {
+                                        characterStats[i, SkillCD]--;
+                                    }
+                                }
                                 totalHP = CharacterCreation.AssignTotalHP(currentHP);
                             } while (Combat.ValidateHP(totalHP) && Combat.ValidateHP(currentHPMonster));
                             if (Combat.ValidateHP(totalHP))
