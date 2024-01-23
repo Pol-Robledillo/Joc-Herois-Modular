@@ -1,5 +1,6 @@
 ﻿using static System.Net.Mime.MediaTypeNames;
 using System;
+using LlibreriaJoc;
 
 namespace ClassesCreacioPersonatges
 {
@@ -84,7 +85,7 @@ namespace ClassesCreacioPersonatges
             {
                 for (int j = 0; j < statTypes; j++)
                 {
-                    stats[i, j] = GenerateRandom(minStats[i, j], maxStats[i, j]);
+                    stats[i, j] = GlobalMethods.GenerateRandom(minStats[i, j], maxStats[i, j] + 1);
                 }
             }
             return stats;
@@ -93,14 +94,9 @@ namespace ClassesCreacioPersonatges
         {
             for (int i = 0; i < stats.Length; i++)
             {
-                stats[i] = GenerateRandom(minStats[i], maxStats[i]);
+                stats[i] = GlobalMethods.GenerateRandom(minStats[i], maxStats[i] + 1);
             }
             return stats;
-        }
-        public static int GenerateRandom(int min, int max)
-        {
-            Random random = new Random();
-            return random.Next(min, max + 1);
         }
         public static double[] AssignCurrentHP(double[] currentHP, int[,] characters, int HP)
         {

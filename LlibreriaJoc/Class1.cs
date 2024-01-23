@@ -14,5 +14,10 @@
         {
             return option == "b";
         }
+        public static int GenerateRandom(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
     }
 }

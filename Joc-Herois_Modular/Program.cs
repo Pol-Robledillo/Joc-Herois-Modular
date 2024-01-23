@@ -30,6 +30,11 @@ namespace JocHerois
                                            "+", "*", "ª", "º", "<", ">",
                                            "¬", "¨", "´", "`", "€", "£" };
             string[] difficultyMenuOptions = { "a", "b", "c", "d" };
+            string[] actionMenuOptions = { "a", "b", "c"};
+            string[] skills = { "Noqueja el monstre 2 torns",
+                                    "Augmenta la seva defensa al 100% durant 3 torns",
+                                    "Dispara una bola de foc que fa 3 cops el seu atac",
+                                    "Cura 500 de vida a tots els herois vius" }; 
 
             //MISSATGES
             const string ArcherMSG = "Arquer";
@@ -62,17 +67,19 @@ namespace JocHerois
             const string MsgMonsterStats = "Les stats del monstre són: \nVida\tAtac\tDefensa";
             const string MsgShowMonsterStats = "{0}\t{1}\t{2}";
             const string MsgShowMonsterHP = "Vida del monstre: {0}";
+            const string MsgSelectAction = "{0} \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
             const string MsgYouWin = "Has guanyat!";
             const string MsgYouLose = "Has perdut!";
-            const string MsgMaxAttempts = "Has superat el límit d'intents";
+            const string MsgSkipTurn = "S'ha saltat el torn.";
+            const string MsgMaxAttempts = "Has superat el límit d'intents. ";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
 
             //VARIABLES
 
             double totalHP, currentHPMonster;
             double[] currentHP = new double[Characters];
-            int attempts = 3;
-            int[] aliveCharacters = { 0, 1, 2, 3 };
+            int attempts = 3, torns, tornPersonatge;
+            int[] usedCharacters = new int[4];
             int[] monsterStats = new int[3];
             int[,] characterStats = new int[Characters, StatTypes];
             string option, characterNames, difficulty, characterMSG = "", statMSG = "";
@@ -233,6 +240,49 @@ namespace JocHerois
                             {
                                 Combat.ShowHP(currentHP, characterNamesList);
                                 Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
+
+                                for (int i = 0; i < Characters; i++)
+                                {
+                                    attempts = MaxAttempts;
+                                    do
+                                    {
+                                        tornPersonatge = GlobalMethods.GenerateRandom(0, Characters - 1);
+                                    } while (usedCharacters.Contains(tornPersonatge) || !Combat.ValidateHP(currentHP[tornPersonatge]));
+                                    usedCharacters[i] = tornPersonatge;
+
+                                    do
+                                    {
+                                        //ELECCIÓ OPCIÓ MENÚ ACCIONS
+                                        Console.WriteLine(MsgSelectAction, characterNamesList[tornPersonatge], attempts, skills[tornPersonatge]);
+                                        option = Console.ReadLine().ToLower();
+                                        Console.WriteLine();
+                                        if (!GlobalMethods.ValidateOption(option, actionMenuOptions))
+                                        {
+                                            attempts--;
+                                        }
+                                    } while (!GlobalMethods.ValidateOption(option, actionMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+                                    if (!GlobalMethods.ValidateAttempts(attempts))
+                                    {
+                                        Console.WriteLine(MsgMaxAttempts + MsgSkipTurn);
+                                    } else
+                                    {
+                                        switch (option)
+                                        {
+                                            case "a":
+                                                //ATACAR
+
+                                                break;
+                                            case "b":
+                                                //DEFENSAR
+
+                                                break;
+                                            case "c":
+                                                //HABILITAT ESPECIAL
+
+                                                break;
+                                        }
+                                    }
+                                }
 
                                 totalHP = CharacterCreation.AssignTotalHP(currentHP);
                             } while (Combat.ValidateHP(totalHP) && Combat.ValidateHP(currentHPMonster));
