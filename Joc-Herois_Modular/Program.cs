@@ -11,7 +11,7 @@ namespace JocHerois
         {
             //CONSTANTS
 
-            const int Characters = 4, StatTypes = 4, MaxAttempts = 3, Archer = 0, Barbarian = 1, Mage = 2, Druid = 3, HP = 0, ATK = 1, DEF = 2, SkillCD = 3, MaxSkillCD = 5, MissProb = 5;
+            const int Characters = 4, StatTypes = 4, MaxAttempts = 3, Archer = 0, Barbarian = 1, Mage = 2, Druid = 3, HP = 0, ATK = 1, DEF = 2, SkillCD = 3, MaxSkillCD = 5, MissProb = 5, CritRate = 10;
             int[] MonsterMinStats = { 7000, 300, 20 };
             int[] MonsterMaxStats = { 10000, 400, 30 };
             int[,] MinStats = { { 1500, 200, 25, 0 },
@@ -69,6 +69,8 @@ namespace JocHerois
             const string MsgShowMonsterHP = "Vida del monstre: {0}";
             const string MsgSelectAction = "{0} \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
             const string MsgMissedAtack = "Has fallat l'atac!";
+            const string MsgAttack = "{0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
+            const string MsgCritAttack = "Atac crític! {0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
             const string MsgYouWin = "Has guanyat!";
             const string MsgYouLose = "Has perdut!";
             const string MsgSkipTurn = "S'ha saltat el torn.";
@@ -275,7 +277,20 @@ namespace JocHerois
                                                 {
                                                     Console.WriteLine(MsgMissedAtack);
                                                 }
-                                                atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK], monsterStats[DEF]);
+                                                else
+                                                {
+                                                    atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK], monsterStats[DEF]);
+                                                    if (Combat.CalcProbability(CritRate))
+                                                    {
+                                                        currentHPMonster -= atkDamage * 2;
+                                                        Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
+                                                    }
+                                                    else
+                                                    {
+                                                        currentHPMonster -= atkDamage;
+                                                        Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
+                                                    }
+                                                }
                                                 break;
                                             case "b":
                                                 //DEFENSAR
