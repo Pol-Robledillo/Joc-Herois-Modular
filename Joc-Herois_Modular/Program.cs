@@ -76,7 +76,7 @@ namespace JocHerois
 
             //VARIABLES
 
-            double totalHP, currentHPMonster;
+            double totalHP, currentHPMonster, atkDamage;
             double[] currentHP = new double[Characters];
             int attempts = 3, torns, tornPersonatge;
             int[] usedCharacters = new int[4];
@@ -270,7 +270,7 @@ namespace JocHerois
                                         {
                                             case "a":
                                                 //ATACAR
-
+                                                atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK], monsterStats[DEF]);
                                                 break;
                                             case "b":
                                                 //DEFENSAR
