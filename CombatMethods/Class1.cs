@@ -50,5 +50,9 @@ namespace CombatMethods
             int randomNum = GlobalMethods.GenerateRandom(100);
             return randomNum < probability;
         }
+        public static bool ValidateOverHeal(double hp, int maxHP)
+        {
+            return hp > maxHP;
+        }
     }
 }
