@@ -70,7 +70,8 @@ namespace JocHerois
             const string MsgSelectAction = "{0} \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
             const string MsgYouWin = "Has guanyat!";
             const string MsgYouLose = "Has perdut!";
-            const string MsgMaxAttempts = "Has superat el límit d'intents";
+            const string MsgSkipTurn = "S'ha saltat el torn.";
+            const string MsgMaxAttempts = "Has superat el límit d'intents. ";
             const string MsgGameExit = "Gràcies per jugar! Fins aviat!";
 
             //VARIABLES
@@ -260,6 +261,27 @@ namespace JocHerois
                                             attempts--;
                                         }
                                     } while (!GlobalMethods.ValidateOption(option, actionMenuOptions) && GlobalMethods.ValidateAttempts(attempts));
+                                    if (!GlobalMethods.ValidateAttempts(attempts))
+                                    {
+                                        Console.WriteLine(MsgMaxAttempts + MsgSkipTurn);
+                                    } else
+                                    {
+                                        switch (option)
+                                        {
+                                            case "a":
+                                                //ATACAR
+
+                                                break;
+                                            case "b":
+                                                //DEFENSAR
+
+                                                break;
+                                            case "c":
+                                                //HABILITAT ESPECIAL
+
+                                                break;
+                                        }
+                                    }
                                 }
 
                                 totalHP = CharacterCreation.AssignTotalHP(currentHP);
