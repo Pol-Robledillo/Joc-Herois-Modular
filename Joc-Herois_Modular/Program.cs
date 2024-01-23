@@ -79,6 +79,7 @@ namespace JocHerois
 
             //VARIABLES
 
+            bool[] charactersDefending = { false, false, false, false };
             double totalHP, currentHPMonster, atkDamage;
             double[] currentHP = new double[Characters];
             int attempts = 3, torns, tornPersonatge;
@@ -294,7 +295,7 @@ namespace JocHerois
                                                 break;
                                             case "b":
                                                 //DEFENSAR
-
+                                                charactersDefending[tornPersonatge] = true;
                                                 break;
                                             case "c":
                                                 //HABILITAT ESPECIAL
@@ -303,12 +304,18 @@ namespace JocHerois
                                         }
                                     }
                                 }
+
+                                //ACTUALITZACIÓ STATS
                                 for (int i = 0; i < Characters; i++)
                                 {
                                     if (Combat.ValidateSkillCD(characterStats[i, SkillCD]))
                                     {
                                         characterStats[i, SkillCD]--;
                                     }
+                                }
+                                for (int i = 0; i < Characters; i++)
+                                {
+                                    charactersDefending[i] = false;
                                 }
                                 totalHP = CharacterCreation.AssignTotalHP(currentHP);
                             } while (Combat.ValidateHP(totalHP) && Combat.ValidateHP(currentHPMonster));
