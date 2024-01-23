@@ -32,5 +32,9 @@
             }
             Console.WriteLine(MsgCharsHP, names[aliveChars[0]], hpOrder[0], names[aliveChars[1]], hpOrder[1], names[aliveChars[2]], hpOrder[2], names[aliveChars[3]], hpOrder[3]);
         }
+        public static double Attack(double attack, double defense)
+        {
+            return attack - (attack * (defense * 100));
+        }
     }
 }
