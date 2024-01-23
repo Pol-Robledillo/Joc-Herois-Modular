@@ -30,11 +30,11 @@ namespace JocHerois
                                            "+", "*", "ª", "º", "<", ">",
                                            "¬", "¨", "´", "`", "€", "£" };
             string[] difficultyMenuOptions = { "a", "b", "c", "d" };
-            string[] actionMenuOptions = { "a", "b", "c"};
+            string[] actionMenuOptions = { "a", "b", "c" };
             string[] skills = { "Noqueja el monstre 2 torns",
-                                    "Augmenta la seva defensa al 100% durant 3 torns",
-                                    "Dispara una bola de foc que fa 3 cops el seu atac",
-                                    "Cura 500 de vida a tots els herois vius" }; 
+                                "Augmenta la seva defensa al 100% durant 3 torns",
+                                "Dispara una bola de foc que fa 3 cops el seu atac",
+                                "Cura 500 de vida a tots els herois vius" };
 
             //MISSATGES
             const string ArcherMSG = "Arquer";
@@ -67,10 +67,15 @@ namespace JocHerois
             const string MsgMonsterStats = "Les stats del monstre són: \nVida\tAtac\tDefensa";
             const string MsgShowMonsterStats = "{0}\t{1}\t{2}";
             const string MsgShowMonsterHP = "Vida del monstre: {0}";
+            const string MsgRound = "RONDA {0}";
             const string MsgSelectAction = "{0} \nSelecciona l'acció: ({1} intents restants)\na. Atacar \nb. Protegir-se (Defensa x2) \nc. Habilitat especial (5 torns de CD): {2}";
             const string MsgMissedAtack = "Has fallat l'atac!";
             const string MsgAttack = "{0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
             const string MsgCritAttack = "Atac crític! {0} ataca a {1} amb {2} d'atac. {1} es defensa i només rep {3} de dany. Vida restant de {1}: {4}.";
+            const string MsgArcherSkill = "El monstre està atordit durant 2 torns.";
+            const string MsgBarbarianSkill = "La defensa de {0} s'ha augmentat al 100% durant 3 torns.";
+            const string MsgMageSkill = "{0} li llença una bola de foc al monstre.";
+            const string MsgDruidSkill = "{0} ha curat 500 de vida a tots els herois vius.";
             const string MsgYouWin = "Has guanyat!";
             const string MsgYouLose = "Has perdut!";
             const string MsgSkipTurn = "S'ha saltat el torn.";
@@ -82,7 +87,7 @@ namespace JocHerois
             bool[] charactersDefending = { false, false, false, false };
             double totalHP, currentHPMonster, atkDamage;
             double[] currentHP = new double[Characters];
-            int attempts = 3, torns, tornPersonatge;
+            int attempts = 3, round = 1, tornPersonatge, monsterStunned, barbarianSkill;
             int[] usedCharacters = new int[4];
             int[] monsterStats = new int[3];
             int[,] characterStats = new int[Characters, StatTypes];
@@ -242,6 +247,8 @@ namespace JocHerois
                             //COMBAT
                             do
                             {
+                                Console.Clear();
+                                Console.WriteLine(MsgRound, round);
                                 Combat.ShowHP(currentHP, characterNamesList);
                                 Console.WriteLine(MsgShowMonsterHP, currentHPMonster);
 
@@ -253,6 +260,8 @@ namespace JocHerois
                                         tornPersonatge = GlobalMethods.GenerateRandom(0, Characters - 1);
                                     } while (usedCharacters.Contains(tornPersonatge) || !Combat.ValidateHP(currentHP[tornPersonatge]));
                                     usedCharacters[i] = tornPersonatge;
+
+                                    Console.WriteLine(characterNamesList[tornPersonatge]);
 
                                     do
                                     {
@@ -268,7 +277,8 @@ namespace JocHerois
                                     if (!GlobalMethods.ValidateAttempts(attempts))
                                     {
                                         Console.WriteLine(MsgMaxAttempts + MsgSkipTurn);
-                                    } else
+                                    }
+                                    else
                                     {
                                         switch (option)
                                         {
@@ -289,7 +299,7 @@ namespace JocHerois
                                                     else
                                                     {
                                                         currentHPMonster -= atkDamage;
-                                                        Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
+                                                        Console.WriteLine(MsgAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
                                                     }
                                                 }
                                                 break;
@@ -299,7 +309,53 @@ namespace JocHerois
                                                 break;
                                             case "c":
                                                 //HABILITAT ESPECIAL
-
+                                                switch (tornPersonatge)
+                                                {
+                                                    case Archer:
+                                                        Console.WriteLine(MsgArcherSkill);
+                                                        monsterStunned = 2;
+                                                        break;
+                                                    case Barbarian:
+                                                        Console.WriteLine(MsgBarbarianSkill, characterNamesList[tornPersonatge]);
+                                                        barbarianSkill = 3;
+                                                        break;
+                                                    case Mage:
+                                                        Console.WriteLine(MsgMageSkill, characterNamesList[tornPersonatge]);
+                                                        if (Combat.CalcProbability(MissProb))
+                                                        {
+                                                            Console.WriteLine(MsgMissedAtack);
+                                                        }
+                                                        else
+                                                        {
+                                                            atkDamage = Combat.Attack(characterStats[tornPersonatge, ATK] * 3, monsterStats[DEF]);
+                                                            if (Combat.CalcProbability(CritRate))
+                                                            {
+                                                                currentHPMonster -= atkDamage * 2;
+                                                                Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
+                                                            }
+                                                            else
+                                                            {
+                                                                currentHPMonster -= atkDamage;
+                                                                Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
+                                                            }
+                                                        }
+                                                        break;
+                                                    case Druid:
+                                                        Console.WriteLine(MsgDruidSkill, characterNamesList[tornPersonatge]);
+                                                        for (int j = 0; j < Characters; j++)
+                                                        {
+                                                            if (Combat.ValidateHP(currentHP[j]))
+                                                            {
+                                                                currentHP[j] += 500;
+                                                                if (Combat.ValidateOverHeal(currentHP[j], characterStats[j, HP]))
+                                                                {
+                                                                    currentHP[j] = characterStats[j, HP];
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                }
+                                                characterStats[tornPersonatge, SkillCD] = MaxSkillCD;
                                                 break;
                                         }
                                     }
