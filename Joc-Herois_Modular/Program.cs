@@ -14,10 +14,10 @@ namespace JocHerois
             const int Characters = 4, StatTypes = 4, MaxAttempts = 3, Archer = 0, Barbarian = 1, Mage = 2, Druid = 3, HP = 0, ATK = 1, DEF = 2, SkillCD = 3, MaxSkillCD = 5, MissProb = 5, CritRate = 10;
             int[] MonsterMinStats = { 7000, 300, 20 };
             int[] MonsterMaxStats = { 10000, 400, 30 };
-            int[,] MinStats = { { 1, 200, 25, 0 }, //1500
-                                { 1, 150, 35, 0 }, //3000
-                                { 1, 300, 20, 0 }, //1100
-                                { 1, 100, 25, 0 } }; //2000
+            int[,] MinStats = { { 1500, 200, 25, 0 },
+                                { 3000, 150, 35, 0 },
+                                { 1100, 300, 20, 0 },
+                                { 2000, 100, 25, 0 } };
             int[,] MaxStats = { { 2000, 300, 35, 0 },
                                 { 3750, 250, 45, 0 },
                                 { 1500, 400, 35, 0 },
@@ -289,7 +289,7 @@ namespace JocHerois
                                         Console.WriteLine(MsgSelectAction, characterNamesList[tornPersonatge], attempts, skills[tornPersonatge]);
                                         option = Console.ReadLine().ToLower();
                                         Console.WriteLine();
-                                        if (!GlobalMethods.ValidateOption(option, actionMenuOptions))
+                                        if (!GlobalMethods.ValidateOption(option, actionMenuOptions) || Combat.ValidateSkillCD(option, characterStats[tornPersonatge, SkillCD]))
                                         {
                                             attempts--;
                                         }
@@ -315,11 +315,19 @@ namespace JocHerois
                                                     {
                                                         atkDamage *= 2;
                                                         currentHPMonster -= atkDamage;
+                                                        if (currentHPMonster < 0)
+                                                        {
+                                                            currentHPMonster = 0;
+                                                        }
                                                         Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
                                                     }
                                                     else
                                                     {
                                                         currentHPMonster -= atkDamage;
+                                                        if (currentHPMonster < 0)
+                                                        {
+                                                            currentHPMonster = 0;
+                                                        }
                                                         Console.WriteLine(MsgAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK], atkDamage, currentHPMonster);
                                                     }
                                                 }
@@ -354,11 +362,19 @@ namespace JocHerois
                                                             {
                                                                 atkDamage *= 2;
                                                                 currentHPMonster -= atkDamage;
+                                                                if (currentHPMonster < 0)
+                                                                {
+                                                                    currentHPMonster = 0;
+                                                                }
                                                                 Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
                                                             }
                                                             else
                                                             {
                                                                 currentHPMonster -= atkDamage;
+                                                                if (currentHPMonster < 0)
+                                                                {
+                                                                    currentHPMonster = 0;
+                                                                }
                                                                 Console.WriteLine(MsgCritAttack, characterNamesList[tornPersonatge], MonsterMSG, characterStats[tornPersonatge, ATK] * 3, atkDamage, currentHPMonster);
                                                             }
                                                         }
