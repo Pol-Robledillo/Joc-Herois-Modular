@@ -19,5 +19,10 @@
             Random random = new Random();
             return random.Next(min, max);
         }
+        public static int GenerateRandom(int max)
+        {
+            Random random = new Random();
+            return random.Next(max);
+        }
     }
 }
