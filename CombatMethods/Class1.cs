@@ -1,4 +1,5 @@
-﻿namespace CombatMethods
+﻿using LlibreriaJoc;
+namespace CombatMethods
 {
     public class Combat
     {
@@ -43,6 +44,11 @@
         public static double Attack(double attack, double defense)
         {
             return attack - (attack * (defense * 100));
+        }
+        public static bool CalcProbability(int probability)
+        {
+            int randomNum = GlobalMethods.GenerateRandom(100);
+            return randomNum < probability;
         }
     }
 }
